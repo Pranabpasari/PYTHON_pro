@@ -115,12 +115,27 @@ plt.ylabel("Billing Amount ($)")
 plt.grid(True)
 plt.show()
 
-# Line plot: Patient Record Processing (Admissions over time)
-plt.figure(figsize=(8, 5))
-data.groupby(data['Date of Admission'].dt.date).size().plot(kind='line', marker='o', color='blue')
-plt.title("Patient Record Processing Over Time")
-plt.xlabel("Date of Admission")
-plt.ylabel("Number of Patients Admitted")
+#  Stacked Area Chart: Patient Record Processing (Admissions over time)
+selected_conditions = ['Cancer', 'Diabetes', 'Obesity']
+filtered = data[data['Medical Condition'].isin(selected_conditions)].copy()
+
+# Step 2: Group by Month and Condition
+filtered['Month'] = filtered['Date of Admission'].dt.to_period('M').dt.to_timestamp()
+monthly_counts = filtered.groupby(['Month', 'Medical Condition']).size().unstack(fill_value=0)
+
+# Step 3: Stacked area plot
+plt.figure(figsize=(12, 6))
+plt.stackplot(
+    monthly_counts.index,
+    [monthly_counts[cond] for cond in monthly_counts.columns],
+    labels=monthly_counts.columns,
+    alpha=0.8
+)
+plt.title("Monthly Admissions by Medical Condition (Stacked Area)")
+plt.xlabel("Month")
+plt.ylabel("Number of Admissions")
+plt.legend(title="Condition", loc='upper left')
 plt.xticks(rotation=45)
+plt.tight_layout()
 plt.grid(True)
 plt.show()
