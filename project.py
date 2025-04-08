@@ -17,7 +17,7 @@ data.dropna(inplace=True)
 data["Date of Admission"] = pd.to_datetime(data["Date of Admission"], errors='coerce')
 data["Discharge Date"] = pd.to_datetime(data["Discharge Date"], errors='coerce')
 
-# Remove duplicates
+# Remove duplicates data
 data.drop_duplicates(inplace=True)
 
 # Reset index after cleaning
