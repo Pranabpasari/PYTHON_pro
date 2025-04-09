@@ -30,14 +30,20 @@ data["Billing Amount"] = pd.to_numeric(data["Billing Amount"], errors='coerce')
 print(data.info())
 print(data.describe())
 
-# Identify the most common diseases
-disease_counts = data['Medical Condition'].value_counts().head(10)
-plt.figure(figsize=(8, 5))
-sns.barplot(x=disease_counts.index, y=disease_counts.values, palette='Blues')
-plt.xticks(rotation=45)
-plt.title("Top 10 Most Common Diseases")
-plt.ylabel("Number of Cases")
-plt.xlabel("Disease")
+# 1. Disease Prediction Heatmap by Age & Gender
+# Visualize which diseases are more common for specific age groups and gender combinations.
+
+# Create age bins
+data['Age Group'] = pd.cut(data['Age'], bins=[0, 18, 35, 50, 65, 80, 100],
+                         labels=['0-18', '19-35', '36-50', '51-65', '66-80', '81-100'])
+
+# Group by Gender, Age Group, and Condition
+pivot = data.pivot_table(index='Age Group', columns='Gender', values='Medical Condition', aggfunc=lambda x: x.mode()[0] if not x.mode().empty else None)
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(pivot.fillna("N/A").astype(str).applymap(lambda x: len(x)), cmap="YlGnBu", annot=pivot, fmt='')
+plt.title("Most Common Disease by Age Group and Gender")
+plt.tight_layout()
 plt.show()
 
 # Assess treatment cost distribution
