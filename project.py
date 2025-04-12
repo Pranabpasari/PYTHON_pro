@@ -64,14 +64,19 @@ plt.grid(True)
 plt.tight_layout()
 plt.show()
 
-# KDE Plot for Billing Amount
-plt.figure(figsize=(10, 5))
-sns.kdeplot(data["Billing Amount"].dropna(), color="teal", lw=3, bw_adjust=0.4, fill=True, alpha=0.3)
-plt.title("Distribution of Treatment Costs", fontsize=18, fontweight='bold', color='darkblue')
-plt.xlabel("Billing Amount ($)", fontsize=14, color='darkblue')
-plt.ylabel("Density", fontsize=14, color='darkblue')
-plt.xticks(fontsize=12, color='black')
+# Bar Plot for Billing Amount in ranges
+bins = [0, 500, 1000, 1500, 2000, 5000, 10000]  # Define your own ranges
+labels = ['0-500', '501-1000', '1001-1500', '1501-2000', '2001-5000', '5001-10000']
+data['Billing Range'] = pd.cut(data['Billing Amount'], bins=bins, labels=labels, right=False)
+
+plt.figure(figsize=(10, 6))
+sns.countplot(x="Billing Range", data=data, hue="Billing Range", palette="Blues", legend=False)
+plt.title("Count of Treatment Costs in Billing Ranges", fontsize=18, fontweight='bold', color='darkblue')
+plt.xlabel("Billing Amount Ranges ($)", fontsize=14, color='darkblue')
+plt.ylabel("Number of Patients", fontsize=14, color='darkblue')
+plt.xticks(rotation=45, fontsize=12, color='black')
 plt.yticks(fontsize=12, color='black')
+plt.tight_layout()
 plt.show()
 
 # Gender Distribution Pie Chart
