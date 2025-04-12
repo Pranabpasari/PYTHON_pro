@@ -68,14 +68,13 @@ plt.xlabel("Age")
 plt.ylabel("Frequency")
 plt.show()
 
-# Analyze hospital efficiency based on readmission rates
-hospital_counts = data['Hospital'].value_counts().head(10)
-plt.figure(figsize=(8, 5))
-sns.barplot(x=hospital_counts.index, y=hospital_counts.values, palette='Reds')
-plt.xticks(rotation=45)
+# Top 10 hospitals by admission count (horizontal bar chart)
+top_hospitals = data["Hospital"].value_counts().head(10)
+sns.barplot(x=top_hospitals.values, y=top_hospitals.index, palette='Reds')
 plt.title("Top 10 Hospitals by Admissions")
-plt.ylabel("Number of Admissions")
-plt.xlabel("Hospital")
+plt.xlabel("Admissions")
+plt.ylabel("Hospital")
+plt.tight_layout()
 plt.show()
 
 
